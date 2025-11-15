@@ -1,0 +1,43 @@
+---
+import SkillCard from "./SkillCard.astro"
+import { mySkills } from "../content/db/skills";
+import type { SkillInterface } from "../interfaces/interface";
+---
+
+<div class="max-w-6xl w-full mx-auto">
+    <div class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white border-opacity-20 p-8 lg:p-12">
+        
+        <!-- Título de la sección -->
+        <h2 class="text-4xl lg:text-5xl font-bold text-black mb-4 text-center">
+            Habilidades Técnicas
+        </h2>
+        <p class="text-gray-600 text-center mb-12 text-lg">
+            Tecnologías y herramientas con las que trabajo
+        </p>
+
+        <!-- Grid de habilidades -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+
+            {
+        mySkills.map((item: SkillInterface) => (
+          <SkillCard
+            title={item.title}
+            color={item.color}
+            icon={item.icon}
+            skills={item.skills}
+          />
+        ))
+      }
+
+        </div>
+
+        <!-- Sección adicional opcional -->
+        <div class="mt-10 p-6 bg-cyan-500 rounded-2xl border-l-4 border-cyan-400">
+            <p class="text-white text-center">
+                Siempre en búsqueda de nuevas tecnologías y mejores prácticas para mantenerme actualizado en el mundo del desarrollo.
+            </p>
+        </div>
+
+    </div>
+</div>

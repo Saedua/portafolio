@@ -1,0 +1,69 @@
+---
+import TechnicalStackComponent from "./TechnicalStackComponent.astro"
+import { stack } from "../content/db/technicalStack"
+import type { TechnicalStack } from "../interfaces/interface"
+---
+<div class="max-w-5xl w-full mx-auto">
+  <div
+    class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white border-opacity-20 p-8 lg:p-12"
+  >
+
+    <h2 class="text-4xl lg:text-5xl font-bold text-black mb-8 text-center">
+      Proyecto Rental Cars
+    </h2>
+
+
+    <div class="text-lg leading-relaxed space-y-6 mb-10 text-justify">
+      <p>
+        Una empresa de vehiculo blindados desea implementar una arquitectura para su negocio. El objetivo principal de ellos es tener una parte de Base de Datos transaccional, un almacenamiento analitico, orquestacion de datos, plataforma de analisis y gestion de secretos.
+        <br>
+        <br>
+        Se define la arquitectura como si se tratase de una base de datos transaccional, con su fuente de datos el cual proviene de una API, ademas de esto tambien se desea implementar una parte de almacenamiento y plataforma para analisis, por lo que tambien implementaremos servicios de Data Warehouse.
+        <br>
+        <br>
+        La empresa ademas desea conocer la rentabilidad, mantenimiento y patrones de uso. Para ello, tendremos que saber el estado de los vehiculos para saber su mantenimiento y poder sacar provecho de la informacion para verificar el estado de los mismos vehiculos, por lo que otra fuente de datos sera mediante dispositivos de IoT para dar monitoreo a los vehiculos. Ademas tambien un monitoreo a la API para conocer su estado.
+      </p>
+    </div>
+
+    <div class="mb-10">
+      <h3 class="text-2xl font-bold text-cyan-400 mb-6 justify-center items-center flex">Arquitectura de la Solucion</h3>
+
+      <div class="flex items-center justify-center h-full">
+        <img src="/src/assets/diagrama.png" alt="">
+      </div>
+
+    </div>
+
+
+    <div
+      class="p-6 mb-10"
+    >
+      <p class="text-lg text-justify">
+        Se implemento la parte de las WebApps para poder contener la interfaz de usuario y la API de la aplicacion que sera usada por el empleado del negocio. Ademas de un App Insights que sirve para monitorear la API
+        <br><br>
+        Tambien para la base de datos transaccional, se selecciono SQL Database de Azure, al ser esta basada en SQL Server y ser una base de datos relacional.
+        <br><br>
+        Para el almacenamiento analitico se selecciono Azure Data Lake, este nos ayudara a contener la informacion transformada de la base de datos relacional a una forma facil de seleccionar por la plataforma de analisis, ademas de que contendra directamente los datos de los dispositivos IoT de los vehiculos al ser estos datos no estructurados. El Data Lake ayuda a que las consultas para analisis no sean sobre la base de datos transaccional, que sirve como servicio principal del negocio, debido a que estas consultas pueden ser muy pesadas y podria resultar en una ineficiencia de la OLTP.
+        <br><br>
+        Para la orquestacion de datos se eligio a Azure Data Factory, este recurso se puede conectar facilmente a SQL Database y al Data Lake, en este recurso se pueden crear pipelines que seran los que seleccionaran los datos de la OLTP y los transformara para poder almacenarlos en el Data Lake
+        <br><br>
+        La plataforma de analisis sera el Azure Synapse Analytics, esta plataforma incluye todo lo necesario para una plataforma de analisis. Ademas de tener caracteristicas de un DataWarehouse, tambien cuenta con soporte para Spark Pools y Notebooks, que ayudan a realizar analisis que pueden llegar a ser muy complejos o muy pesados hablando de coste computacional.
+        <br><br>
+        Para la gestion de secretos se selecciono a Azure Key Vault, este recurso puede guardar passwords de forma segura para ser utilizados por otros recursos o incluso para ser utilizados en los notebooks en dado caso que se necesite solicitar una credencial.
+    </p>
+    </div>
+
+
+    <div class="flex justify-center">
+      <a
+        href="https://github.com/Saedua/rentalcars-architecture"
+        class="group relative px-10 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center gap-3"
+      >
+        <span class="relative z-10">Ver codigo</span>
+        <span
+          class="absolute inset-0 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        ></span>
+      </a>
+    </div>
+  </div>
+</div>
