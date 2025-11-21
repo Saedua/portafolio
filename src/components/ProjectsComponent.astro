@@ -15,7 +15,6 @@ import type { ProjectInterface } from "../interfaces/interface";
 
     <!-- Grid de proyectos -->
     <div class="space-y-8">
-      <!-- Proyecto 1: Ingeniería de Software -->
       {
         myProjects.map((item: ProjectInterface) => (
           <Project
@@ -23,12 +22,11 @@ import type { ProjectInterface } from "../interfaces/interface";
             devType={item.devType}
             description={item.description}
             technologiesUsed={item.technologiesUsed}
-            githubUrl={item.githubUrl}
+            detailsUrl={item.detailsUrl}
           />
         ))
       }
 
-      <!-- Proyecto 2: RestCountries -->
     </div>
   </div>
 </div>

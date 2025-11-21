@@ -1,0 +1,179 @@
+---
+
+---
+
+<div class="max-w-5xl w-full mx-auto">
+  <div class="mb-6">
+    <a
+      href="/projects"
+      class="inline-flex items-center gap-2 px-6 py-3 font-semibold hover:scale-105 transition-all duration-300"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        class="h-5 w-5"
+        viewBox="0 0 20 20"
+        fill="currentColor"
+      >
+        <path
+          fill-rule="evenodd"
+          d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z"
+          clip-rule="evenodd"></path>
+      </svg>
+    </a>
+  </div>
+
+  <div
+    class="bg-white bg-opacity-10 backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white border-opacity-20 p-8 lg:p-12"
+  >
+    <h2 class="text-4xl lg:text-5xl font-bold text-black mb-8 text-center">
+      Proyecto PokeQueue
+    </h2>
+
+    <div class="text-lg leading-relaxed space-y-6 mb-10 text-justify">
+      <p>
+        Este proyecto implementa una arquitectura en Azure para la generacion de
+        reportes de datos de Pokemon. Permite a los usuarios solicitar reportes
+        con informacion basica (nombre, habilidades y estadisticas base) de los
+        Pokemon de tipos especificos, los cuales son generados en formato CSV.
+        <br /><br />
+        La arquitectura esta compuesta por una interfaz web, una API, una base de
+        datos SQL, Azure Queue Storage, Azure Blob Storage y una Azure Function App.
+        El flujo completo funciona de la siguiente manera: los usuarios realizan
+        solicitudes a traves de la UI, la API registra cada peticion en la base de
+        datos SQL y envia la solicitud al Azure Queue Storage. La Function App actua
+        como procesador asincrono, consume los mensajes de la queue, realizando las
+        peticiones correspondientes a la PokeAPI para recopilar la informacion solicitada,
+        generando el reporte en formato CSV y finalmente, almacenandolo en Azure
+        Blob Storage para su descarga desde la UI.
+      </p>
+    </div>
+
+    <div class="mb-10">
+      <h3
+        class="text-2xl font-bold text-cyan-400 mb-6 justify-center items-center flex"
+      >
+        Arquitectura de la Solucion
+      </h3>
+
+      <div class="flex items-center justify-center h-full">
+        <img src="/diagramaPokequeue.png" alt="" />
+      </div>
+    </div>
+
+    <div class="mb-10">
+      <h3
+        class="text-2xl font-bold text-cyan-400 mb-6 justify-center items-center flex"
+      >
+        Tecnologias Clave
+      </h3>
+      <p class="p-6 text-lg text-justify">
+        Se utilizo NextJS con React para el desarollo de la interfaz web.
+        <br />
+        La API fue construida con Python con FastAPI.
+        <br />
+        Para la base de datos se utilizo Azure SQL Database.
+        <br />
+        Se utilizo Storage Account de Azure para el Queue Storage y Blob Storage.
+        <br />
+        La Function App fue desarrollada en Python
+        <br />
+        La definicion de la arquitectura en Azure se construyo utilizando Terraform.
+      </p>
+    </div>
+
+    <div class="mb-10">
+      <h3
+        class="text-2xl font-bold text-cyan-400 mb-6 justify-center items-center flex"
+      >
+        Resumen de funcionalidades
+      </h3>
+      <p class="p-6 text-lg text-justify">
+        El proyecto dado en clase ya tenia algunas caracteristicas iniciales implementadas, con mi compañero de equipo implementamos funcionalidades extras al proyecto.
+        <br><br>
+        La primera funcionalidad implementada fue la de eliminar los reportes, para ello modificamos la UI para agregar un boton de eliminado y agregamos la funcionalidad de eliminado en la API, para el borrado se creo un procedimiento almacenado en la base de datos para ejecutar la consulta DELETE, la API hace uso de este procedimiento almacenado obteniendo el ID de la solicitud a eliminar y a la vez se hizo uso del SDK de Azure Storage Blob para eliminar el archivo dentro del Blob Storage.
+        <br><br>
+        Luego enriquecimos la informacion del reporte agregando las estadisticas base y las habilidades de los Pokemon obtenidos, para ello se modifico la Function App para agregar una funcion que itera sobre la lista que se habia obtenido inicialmente y utilizando la URL de cada Pokemon, se accedio a los campos requeridos para el enriquecimiento del reporte, creando un nuevo diccionario con toda la informacion deseada, este nuevo diccionario es utilizado por la funcion para generar el CSV.
+        <br><br>
+        Por ultimo, se implemento la funcionalidad para el muestreo aleatorio, en esta funcionalidad el usuario ingresa un numero de maximos registros a obtener y de acuerdo al numero, el reporte selecciona aleatoriamente los Pokemon que se incluiran en el reporte. Para ello se modifico la UI para agregar un campo para ingresar el numero, y en la API se modifico la funcion de insertar una nueva solicitud para aceptar este nuevo parametro, asi mismo en la base de datos se altero la tabla para agregar la nueva columna. Luego en la Function App se modifico la funcion que obtiene los pokemon para aceptar este numero, con ello se selecciona aleatoriamente los pokemon obtenidos de acuerdo al numero del muestro o a la cantidad de pokemon disponibles.
+      </p>
+    </div>
+
+    <div class="mb-10">
+      <h3
+        class="text-2xl font-bold text-cyan-400 mb-6 justify-center items-center flex"
+      >
+        Desafios y Soluciones
+      </h3>
+      <p class="p-6 text-lg text-justify">
+        El desafio que nos enfrentamos en este proyecto fue para recolectar la informacion adicional de los reportes, ya que se estaba obteniendo solo nombre y una URL que contenia esta informacion adicional. La solucion fue implementar una funcion que hace el llamado a la PokeAPI con la URL que recolectamos en el primer llamado, crear la estructura de datos que contiene esta informacion y juntarla con la que ya se tenia del primer llamado. Esta estructura de datos combinada es la que luego obtiene la funcion de generar el archivo CSV.
+        <br>
+        Otro desafio fue al momento de realizar cambios en la arquitectura mediante Terraform, ya que al correr el comando para aplicar el cambio se borraron las variables de entorno ya configuradas. Esta fue una leccion aprendida de tener cuidado con ello, ya que la solucion fue volverlas a configurar. Aunque una mejor practica hubiera sido utilizar el bloque "lifecycle" con el atributo "ignore_changes" para evitar que ciertos cambios afecten los recursos ya creados, en este caso, las Web Apps.
+      </p>
+    </div>
+
+    <!--Botones para los repositorios -->
+    <div class="flex justify-center flex-wrap gap-4 pt-10">
+      <a
+        href="https://github.com/Saedua/pokequeue.terraform"
+        class="group relative px-10 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center text-center gap-3"
+      >
+        <span class="relative z-10">Codigo Terraform</span>
+      </a>
+
+      <a
+        href="https://github.com/Saedua/pokequeue.sql"
+        class="group relative px-10 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center text-center gap-3"
+      >
+        <span class="relative z-10">Codigo SQL</span>
+        
+      </a>
+
+      <a
+        href="https://github.com/Saedua/pokequeue.api"
+        class="group relative px-10 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center text-center gap-3"
+      >
+        <span class="relative z-10">Codigo API</span>
+        
+      </a>
+
+      <a
+        href="https://github.com/Saedua/pokequeue.function"
+        class="group relative px-10 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center text-center gap-3"
+      >
+        <span class="relative z-10">Codigo FunctionApp</span>
+        
+      </a>
+
+      <a
+        href="https://github.com/Saedua/pokequeue.ui"
+        class="group relative px-10 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center text-center gap-3"
+      >
+        <span class="relative z-10">Codigo UI</span>
+        
+      </a>
+    </div>
+
+    <!--Botones para los url publicos -->
+    <div class="flex justify-center gap-6 w-full max-w-2xl mx-auto mt-10">
+      <a
+        href="https://api-pokequeueproject-dev.azurewebsites.net/docs"
+        class="group relative px-8 py-4 bg-cyan-500 text-white font-semibold rounded-full shadow-lg shadow-cyan-500/50 hover:bg-cyan-400 hover:shadow-xl hover:shadow-cyan-400/60 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 flex-1 min-w-0 text-center"
+      >
+        <span class="relative z-10">Ver API</span>
+        <span
+          class="absolute inset-0 rounded-full bg-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        ></span>
+      </a>
+
+      <a
+        href="https://ui-pokequeueproject-dev.azurewebsites.net/"
+        class="group relative px-8 py-4 bg-emerald-500 text-white font-semibold rounded-full shadow-lg shadow-emerald-500/50 hover:bg-emerald-400 hover:shadow-xl hover:shadow-emerald-400/60 hover:scale-105 transition-all duration-300 flex items-center justify-center gap-3 flex-1 min-w-0 text-center"
+      >
+        <span class="relative z-10">Ver UI</span>
+        <span
+          class="absolute inset-0 rounded-full bg-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+        ></span>
+      </a>
+    </div>
+  </div>
+</div>

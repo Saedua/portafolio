@@ -16,7 +16,8 @@ export interface ProjectInterface{
     devType: string,
     description: string,
     technologiesUsed: Technology[],
-    githubUrl: string
+    githubUrl: string,
+    detailsUrl: string
 }
 
 export interface SkillInterface{
